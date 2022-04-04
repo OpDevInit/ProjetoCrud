@@ -3,53 +3,90 @@ console.log("Iniciando meu servidor ");
 
 const express = require('express');
 const req = require('express/lib/request');
-const dados = require("./dados");
-const app = express()
-const port = 3001
+const app = express();
+const port = 3001;
+
+
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-//retornar um curso
+var cadastros = {
+    "clientes":[ 
+         {
+            "id": 1,
+            "nome": "jholl",
+            "endereco": "aqui pertinho",
+            "email": "jholl@gmail.com"
+        },
+        {
+            "id": 2,
+            "nome": "jessica",
+            "endereco": "aqui do lado",
+            "email": "jess@gmail.com"
+        },
+
+    ]
+};
+
+//retornar um cliente
 app.get('/clientes/:index', (req, res) => {
-    const {index} = req.params;
-    
-    return res.json(dados.cadastros[index]);
+    const { index } = req.params;
+
+    return res.json(cadastros.clientes[index]);
 })
 
-//retornar todos os cursos
+//retornar todos os clientes
 app.get('/clientes', (req, res) => {
-     
-    return res.json(dados.cadastros);
+
+    return res.json(cadastros);
 })
 
 //Criar novo cadastro:
 app.post('/clientes', (req, res) => {
-    const {cadastro} =req.body;
-    const {clientes} = dados;
+    var id = req.body.id;
+    var nome = req.body.nome;
+    var endereco = req.body.endereco;
+    var email = req.body.email;
+    var { cadastrados } = cadastros.clientes;
 
-    clientes.push(cadastro);
+    clientes = cadastros.clientes;
+    clientes.push({"id: ":id,"nome ":nome, "endereco: ":endereco,"email: ":email,});
 
-    return res.json(clientes);
+    return  res.json(clientes);
+    
 })
 
-//Atualizar curso:
-app.put('clientes/:index',(req, res) =>{
+//Atualizar cliente:
+app.put('/clientes/:index', (req, res) => {
     const {index} = req.params;
-    const {name} = req.body;
-
-    clientes[index]= name;
-
-    return res.json(cursos);
+    var id = index;
+    var nome = req.body.nome;
+    var endereco = req.body.endereco;
+    var email = req.body.email;
+    const clientes = cadastros.clientes;
+    
+     if(clientes.indexOf(index)){
+    clientes.splice((index-1), 4,{"id: ":id,"nome ":nome, "endereco: ":endereco,"email: ":email})
+    }
+    return res.json(cadastros.clientes[index]);
 })
+//Deletar cliente:
+app.delete('/clientes/:index', (req, res) => {
+    const clientes = cadastros.clientes;
+    const {index} = req.params;
+    var id = index;
+    var nome = req.body.nome;
+    var endereco = req.body.endereco;
+    var email = req.body.email;
+    
 
-//Deletar curso:
-app.delete('clientes/:index',(req, res) =>{
-        const {index} = req.params;
+    if(clientes.indexOf(index)){
+        clientes.splice((index-1), 4)
+        }
+    return res.json({ message: "O curso foi deeletado!!" });
 
-        clientes.splice(index, 1);
-        return res.json({message: "o curso foi deletado"});
-    })
+})
 
 
 
