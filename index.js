@@ -4,87 +4,89 @@ console.log("Iniciando meu servidor ");
 const express = require('express');
 const req = require('express/lib/request');
 const app = express();
-const port = 3001;
-
-
+var port = 3001;
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+
 var cadastros = {
-    "clientes":[ 
-         {
+    "herois": [
+        {
             "id": 1,
-            "nome": "jholl",
-            "endereco": "aqui pertinho",
-            "email": "jholl@gmail.com"
+            "Liga": "Marvel",
+            "Herói": "Homem de Ferro",
+            "Habilidade": "Armaduras",
+            "Personalidade": "Inteligente,filantropo"
         },
         {
+
             "id": 2,
-            "nome": "jessica",
-            "endereco": "aqui do lado",
-            "email": "jess@gmail.com"
+            "Liga": "DC",
+            "Herói": "Batman",
+            "Habilidade": "Armaduras",
+            "Personalidade": "Inteligente,filantropo"
         },
 
     ]
 };
 
-//retornar um cliente
-app.get('/clientes/:index', (req, res) => {
+
+//retornar herói selecionado
+app.get('/herois/:index', (req, res) => {
     const { index } = req.params;
-
-    return res.json(cadastros.clientes[index]);
+    return res.json(cadastros.herois[index]);
 })
 
-//retornar todos os clientes
-app.get('/clientes', (req, res) => {
+//retornar todos os heróis
+app.get('/herois', (req, res) => {
 
-    return res.json(cadastros);
-})
+    return res.json(cadastros.herois);
+
+}
+)
 
 //Criar novo cadastro:
-app.post('/clientes', (req, res) => {
+app.post('/herois', (req, res) => {
     var id = req.body.id;
-    var nome = req.body.nome;
-    var endereco = req.body.endereco;
-    var email = req.body.email;
-    var { cadastrados } = cadastros.clientes;
+    var liga = req.body.Liga;
+    var heroi = req.body.Herói;
+    var habilidade = req.body.Habilidade;
+    var personalidade = req.body.Personalidade;
+    var novoHeroi = cadastros.herois;
 
-    clientes = cadastros.clientes;
-    clientes.push({"id: ":id,"nome ":nome, "endereco: ":endereco,"email: ":email,});
+    novoHeroi.push({ "id: ": id, "Liga ": liga, "Heroi: ": heroi, "Habilidade: ": habilidade, "Personalidade": personalidade });
 
-    return  res.json(clientes);
-    
+    return res.json(novoHeroi);
+
 })
 
-//Atualizar cliente:
-app.put('/clientes/:index', (req, res) => {
-    const {index} = req.params;
+//Atualizar herói:
+app.put('/herois/:index', (req, res) => {
+    const { index } = req.params;
+    var id = req.body.id;
+    var liga = req.body.Liga;
+    var heroi = req.body.Herói;
+    var habilidade = req.body.Habilidade;
+    var personalidade = req.body.Personalidade;
+    var novoHeroi = cadastros.herois;
     var id = index;
-    var nome = req.body.nome;
-    var endereco = req.body.endereco;
-    var email = req.body.email;
-    const clientes = cadastros.clientes;
-    
-     if(clientes.indexOf(index)){
-    clientes.splice((index-1), 4,{"id: ":id,"nome ":nome, "endereco: ":endereco,"email: ":email})
+
+    if (novoHeroi.indexOf(index)) {
+        novoHeroi.splice((index - 1), 4, { "id: ": id, "Liga ": liga, "Heroi: ": heroi, "Habilidade: ": habilidade, "Personalidade": personalidade })
     }
-    return res.json(cadastros.clientes[index]);
+    return res.json(novoHeroi);
 })
-//Deletar cliente:
-app.delete('/clientes/:index', (req, res) => {
-    const clientes = cadastros.clientes;
-    const {index} = req.params;
+//Deletar herói:
+app.delete('/herois/:index', (req, res) => {
+    const herois = cadastros.herois;
+    const { index } = req.params;
     var id = index;
-    var nome = req.body.nome;
-    var endereco = req.body.endereco;
-    var email = req.body.email;
-    
 
-    if(clientes.indexOf(index)){
-        clientes.splice((index-1), 4)
-        }
-    return res.json({ message: "O curso foi deeletado!!" });
+    if (herois.indexOf(index)) {
+        herois.splice((index - 1), 4)
+    }
+    return res.json({ message: "Seu herói  foi deletado!!" });
 
 })
 
